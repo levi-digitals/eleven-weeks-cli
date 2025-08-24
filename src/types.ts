@@ -11,6 +11,7 @@ export interface Theme {
   todayTextColor: string;
   monthColTextColor: string;
   todayBg?: string; // optional distinct today background that overrides time color
+  weekendHeaderTextColor?: string; // lighter color for weekend day names in header
 }
 
 export interface CalendarCell {

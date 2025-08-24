@@ -23,5 +23,6 @@ export const defaultTheme: Theme = {
   todayBorderColor: '#E23838',     // Red border for today
   todayTextColor: '#E23838',       // Red text for today
   monthColTextColor: '#973999',    // Purple
-  todayBg: '#973999'               // Purple fill for today overriding time color
+  todayBg: '#973999',              // Purple fill for today overriding time color
+  weekendHeaderTextColor: '#777'   // Lighter gray for weekend labels
 };

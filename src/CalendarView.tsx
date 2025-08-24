@@ -2,7 +2,7 @@ import React, {useEffect, useState, ReactElement} from 'react';
 import {Box, Text} from 'ink';
 import {CalendarCell, Config} from './types.js';
 import {isTimePixelLit} from './digits.js';
-import {monthLabelForWeek} from './calendar.js';
+import {monthLabelForWeek, startOfDay} from './calendar.js';
 
 interface Props {
   cells: CalendarCell[];
@@ -44,16 +44,35 @@ export const CalendarView = ({cells, config, weeks, date}: Props): ReactElement 
     return false;
   });
 
+  // Helper to compute week starts for identifying current week (today's week).
+  const weekStartOf = (d: Date) => {
+    const shift = (d.getDay() - config.weekStart + 7) % 7;
+    return startOfDay(new Date(d.getFullYear(), d.getMonth(), d.getDate() - shift));
+  };
+  const todayWeekStart = weekStartOf(startOfDay(new Date()));
+
   return (
     <Box flexDirection="column">
       {/* Header */}
       <Box>
-        {dayNames(config.weekStart).map(n => (
-          <Box key={n} width={4} justifyContent="center"><Text>{n}</Text></Box>
-        ))}
+        {dayNames(config.weekStart).map((n, idx) => {
+          // Determine original weekday index (0=Sun..6=Sat) after shift
+          const originalIndex = (config.weekStart + idx) % 7;
+          const isWeekend = originalIndex === 0 || originalIndex === 6;
+          const weekendColor = config.theme.weekendHeaderTextColor;
+          const textColor = isWeekend ? '#000' : undefined;
+          const backgroundColor = isWeekend ? weekendColor : undefined;
+          return (
+            <Box key={n} width={4} justifyContent="center"><Text color={textColor} backgroundColor={backgroundColor}>{n}</Text></Box>
+          );
+        })}
   <Box width={6} justifyContent="center"><Text></Text></Box>
       </Box>
-      {matrix.map((week, wIdx) => (
+      {matrix.map((week, wIdx) => {
+        const firstCellDate = week[0]?.date ?? new Date();
+        const thisWeekStart = weekStartOf(firstCellDate);
+        const isCurrentCalendarWeek = thisWeekStart.getTime() === todayWeekStart.getTime();
+        return (
         <Box key={wIdx}>
           {week.map((cell, dIdx) => {
             const rowForTime = wIdx; // 0..10
@@ -62,16 +81,19 @@ export const CalendarView = ({cells, config, weeks, date}: Props): ReactElement 
             let bg: string | undefined;
             if (isSeparatorRow) {
               bg = undefined;
-            } else if (cell.isToday && config.theme.todayBg) {
-              bg = config.theme.todayBg; // strongest highlight
-            } else if (litOn) {
-              bg = config.theme.timeOnBg;
-            } else if (wIdx < 3) {
-              bg = config.theme.pastBg;
-            } else if (wIdx === 3) {
-              bg = config.theme.currentWeekBg;
             } else {
-              bg = config.theme.futureBg;
+              const cmp = thisWeekStart.getTime() - todayWeekStart.getTime();
+              if (cell.isToday && config.theme.todayBg) {
+                bg = config.theme.todayBg; // strongest highlight stays on today regardless
+              } else if (litOn) {
+                bg = config.theme.timeOnBg;
+              } else if (cmp === 0) {
+                bg = config.theme.currentWeekBg; // actual current week
+              } else if (cmp < 0) {
+                bg = config.theme.pastBg;
+              } else {
+                bg = config.theme.futureBg;
+              }
             }
             const dayNum = cell.date.getDate();
             let content = dayNum.toString().padStart(2,' ');
@@ -88,10 +110,17 @@ export const CalendarView = ({cells, config, weeks, date}: Props): ReactElement 
           })}
           {/* Month label column */}
           <Box width={6} justifyContent="center">
-            <Text color={config.theme.monthColTextColor}>{showLabelForWeek[wIdx] ? monthLabels[wIdx] : ''}</Text>
+            <Text>
+              {showLabelForWeek[wIdx] ? (
+                <Text color={config.theme.monthColTextColor}>{monthLabels[wIdx]} </Text>
+              ) : null}
+              {isCurrentCalendarWeek && (
+                <Text color={config.theme.currentWeekBg}>●</Text>
+              )}
+            </Text>
           </Box>
         </Box>
-      ))}
+      )})}
     </Box>
   );
 };
