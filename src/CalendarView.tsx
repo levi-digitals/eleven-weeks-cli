@@ -62,6 +62,8 @@ export const CalendarView = ({cells, config, weeks, date}: Props): ReactElement 
             let bg: string | undefined;
             if (isSeparatorRow) {
               bg = undefined;
+            } else if (cell.isToday && config.theme.todayBg) {
+              bg = config.theme.todayBg; // strongest highlight
             } else if (litOn) {
               bg = config.theme.timeOnBg;
             } else if (wIdx < 3) {

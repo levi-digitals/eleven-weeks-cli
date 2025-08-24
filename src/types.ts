@@ -10,6 +10,7 @@ export interface Theme {
   todayBorderColor: string;
   todayTextColor: string;
   monthColTextColor: string;
+  todayBg?: string; // optional distinct today background that overrides time color
 }
 
 export interface CalendarCell {

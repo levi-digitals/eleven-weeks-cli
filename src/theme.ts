@@ -9,5 +9,6 @@ export const defaultTheme: Theme = {
   selectionBorderColor: '#fff',
   todayBorderColor: '#ff0',
   todayTextColor: '#ff0',
-  monthColTextColor: '#888'
+  monthColTextColor: '#888',
+  todayBg: '#93ceecff'
 };
