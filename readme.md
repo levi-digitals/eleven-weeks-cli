@@ -7,8 +7,10 @@ An interactive Ink (React for CLI) application that renders an 11‑week rolling
 - 11 visible weeks (3 past, current, 7 future) + header row (day names) + month indicator column.
 - Time display: hours (rows 1–5) and minutes (rows 7–11) encoded as two 3×5 digits each, separated by a blank row (row 6) and a blank spacer column (column 4). Columns used for digits: 1–3 and 5–7.
 - Arrow key navigation (left/right by day, up/down by week); current day pre‑selected.
-- Month indicator column shows the month (short name) for each week (anchored to the week’s mid date).
-- Configurable (flags today, more theming to come): week start day (0=Sun..6=Sat), 12‑hour vs 24‑hour clock.
+- Month indicator column shows the month (short name) for each week (anchored to the week’s mid date) only once per month.
+- Dynamic current week highlight (follows today’s week as you scroll; not anchored to a fixed row).
+- Configurable flags: week start day (0=Sun..6=Sat), 12‑hour vs 24‑hour clock, theme selection.
+- Weekend header labels use a lighter style (and optional background) for quick scanning.
 - Strongly typed TypeScript core.
 
 ## Requirements
@@ -41,13 +43,18 @@ Current flags:
 
 ```bash
 --week-start <0-6>   Set first day of week (0=Sun, 1=Mon, ... 6=Sat). Default: 1 (Monday)
---hour12             Use 12-hour clock (default is 24-hour)
+--hour12             Use 12-hour clock (default 24-hour)
+--theme <name>       Theme name: "default" (colorful) | "gray" (monotone). Default: default
 ```
 
 Example:
 
 ```bash
+# US week (Sunday start), 12h clock, default theme
 eleven-weeks-cli --week-start=0 --hour12
+
+# Monotone gray theme
+eleven-weeks-cli --theme gray
 ```
 
 ### Navigation
@@ -64,20 +71,27 @@ eleven-weeks-cli --week-start=0 --hour12
 - Column 4 (0‑based index 3) is a spacer between digit pairs.
 - A cell “lit” for time uses the time‑on background color.
 
-### Color / Theme (Current Defaults)
+### Color / Theme
 
-| Region | Description |
-| ------ | ----------- |
-| Past weeks (rows 1–3) | Dim background |
-| Current week (row 4) | Highlight background |
-| Future weeks (rows 5–11) | Slightly different dim |
-| Time ON pixels | Accent color |
-| Time OFF pixels | Underlying week color |
-| Selected day | Bracketed like `[15]` |
-| Today | Distinct text color |
-| Month column | Muted text color |
+Two built‑in themes (select with `--theme`):
 
-> Theming flags / config file support are planned (see Roadmap).
+1. default – Colorful palette (current week highlight, purple today fill, blue time pixels, gray inactive weeks).
+2. gray – Monotone subdued palette (varied grays only) for low‑distraction displays.
+
+Visual layers (precedence, top → bottom):
+
+1. Today background (if defined) overrides time pixels.
+2. Time digit ON pixels.
+3. Current week background.
+4. Past / future inactive backgrounds (same gray in default now for simplicity).
+
+Other cues:
+
+- Selected day: bracketed like `[24]`.
+- Weekend headers: lighter text (and background if theme specifies) for Sun/Sat based on configured week start.
+- Month column: shows abbreviated month once per month plus a dot ● marking the current calendar week.
+
+You can extend themes by editing `src/theme.ts` (additional named exports + CLI mapping planned in future roadmap).
 
 ## Development
 
@@ -106,12 +120,12 @@ npm test
 - `src/calendar.ts` – Calendar window generation & selection movement.
 - `src/CalendarView.tsx` – Rendering & coloring logic.
 - `src/App.tsx` – State wiring (config, time ticking, input handling).
-- `src/theme.ts` – Default theme token set.
+- `src/theme.ts` – Default & gray theme token sets.
 
 ## Roadmap / Planned Enhancements
 
 - Config file & environment overrides (JSON / rc file).
-- Theme customization & light/dark presets.
+- Theme customization & additional presets (auto select via env / config file).
 - AM/PM indicator in 12‑hour mode.
 - Improved selection styling (true borders / color inversion).
 - Accessibility / alternative color schemes.

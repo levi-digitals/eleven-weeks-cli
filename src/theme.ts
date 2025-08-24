@@ -26,3 +26,18 @@ export const defaultTheme: Theme = {
   todayBg: '#973999',              // Purple fill for today overriding time color
   weekendHeaderTextColor: '#777'   // Lighter gray for weekend labels
 };
+
+// Monotone gray theme (no chroma) for subdued display
+export const grayTheme: Theme = {
+  pastBg: '#2e2e2e',
+  currentWeekBg: '#444444',
+  futureBg: '#2e2e2e',
+  timeOnBg: '#666666',
+  timeOffBg: '#202020',
+  selectionBorderColor: '#bbbbbb',
+  todayBorderColor: '#ffffff',
+  todayTextColor: '#ffffff',
+  monthColTextColor: '#888888',
+  todayBg: '#555555',
+  weekendHeaderTextColor: '#555555'
+};

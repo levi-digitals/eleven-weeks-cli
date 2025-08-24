@@ -1,18 +1,19 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {useInput} from 'ink';
-import {defaultTheme} from './theme.js';
+import {defaultTheme, grayTheme} from './theme.js';
 import {CalendarView} from './CalendarView.js';
 import {Config, WeekStart} from './types.js';
 import {generateWindow, mapCells, moveSelection} from './calendar.js';
 
-interface Props { weekStart?: number; hour12?: boolean; }
+interface Props { weekStart?: number; hour12?: boolean; themeName?: string; }
 
-export const App = ({weekStart = 1, hour12 = false}: Props) => {
+export const App = ({weekStart = 1, hour12 = false, themeName}: Props) => {
   const ws = (weekStart as WeekStart);
+  const theme = themeName === 'gray' ? grayTheme : defaultTheme;
   const [config] = useState<Config>({
     weekStart: ws,
     hour12,
-    theme: defaultTheme
+    theme
   });
   const [win, setWin] = useState(()=>generateWindow(new Date(), ws));
   const [now, setNow] = useState(new Date());
