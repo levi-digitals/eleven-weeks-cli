@@ -1,17 +1,16 @@
 # eleven-weeks-cli
 
-An interactive Ink (React for CLI) application that renders an 11‑week rolling calendar (plus header) and overlays the current time using colored date cells as a pair of 3×5 digit matrices (HH:MM). Designed for a quick, at‑a‑glance calendar + clock right in your terminal.
+Tiny terminal calendar + live clock. Shows an 11‑week rolling view and a minimal 3×5 style digital time overlay—glanceable, uncluttered.
 
 ## Features
 
-- 11 visible weeks (3 past, current, 7 future) + header row (day names) + month indicator column.
-- Time display: hours (rows 1–5) and minutes (rows 7–11) encoded as two 3×5 digits each, separated by a blank row (row 6) and a blank spacer column (column 4). Columns used for digits: 1–3 and 5–7.
-- Arrow key navigation (left/right by day, up/down by week); current day pre‑selected.
-- Month indicator column shows the month (short name) for each week (anchored to the week’s mid date) only once per month.
-- Dynamic current week highlight (follows today’s week as you scroll; not anchored to a fixed row).
-- Configurable flags: week start day (0=Sun..6=Sat), 12‑hour vs 24‑hour clock, theme selection.
-- Weekend header labels use a lighter style (and optional background) for quick scanning.
-- Strongly typed TypeScript core.
+- Rolling 11‑week view (3 past, current, 7 ahead)
+- Minimal 3×5 digital clock embedded in the grid
+- Arrow key navigation; today auto‑selected
+- Month label shown once per month + current week dot
+- Current week highlight follows today dynamically
+- Configurable: week start, 12h/24h clock, theme (colorful / gray)
+- Weekend headers subtly toned
 
 ## Requirements
 
@@ -91,7 +90,7 @@ Other cues:
 - Weekend headers: lighter text (and background if theme specifies) for Sun/Sat based on configured week start.
 - Month column: shows abbreviated month once per month plus a dot ● marking the current calendar week.
 
-You can extend themes by editing `src/theme.ts` (additional named exports + CLI mapping planned in future roadmap).
+You can extend themes in future releases (user‑configurable themes are on the roadmap).
 
 ## Development
 
@@ -113,14 +112,6 @@ Run tests (placeholder initial tests to be added):
 ```bash
 npm test
 ```
-
-## Internal Architecture (High Level)
-
-- `src/digits.ts` – 3×5 font & time mapping.
-- `src/calendar.ts` – Calendar window generation & selection movement.
-- `src/CalendarView.tsx` – Rendering & coloring logic.
-- `src/App.tsx` – State wiring (config, time ticking, input handling).
-- `src/theme.ts` – Default & gray theme token sets.
 
 ## Roadmap / Planned Enhancements
 
