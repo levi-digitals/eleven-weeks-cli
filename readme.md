@@ -28,7 +28,7 @@ npm install --global eleven-weeks-cli
 Until published, you can clone and link locally:
 
 ```bash
-git clone <repo-url> eleven-weeks-cli
+git clone https://github.com/levi-digitals/eleven-weeks-cli.git eleven-weeks-cli
 cd eleven-weeks-cli
 npm install
 npm run build
@@ -128,7 +128,7 @@ npm test
 
 ## Contributing
 
-PRs welcome once repo is public. Please run `npm test` and ensure build passes.
+PRs welcome once repo is public.
 
 ## License
 
