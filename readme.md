@@ -5,6 +5,8 @@
 
 Tiny terminal calendar + live clock. Shows an 11‑week rolling view and a minimal 3×5 style digital time overlay—glanceable, uncluttered.
 
+**Inspired by the Pebble Watchface “11 weeks”** ([see here](https://apps.rebble.io/en_US/application/5659ab0bc3a3a5e072000081?query=weeks&section=watchfaces)).
+
 ## Features
 
 - Rolling 11‑week view (3 past, current, 7 ahead)
