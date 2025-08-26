@@ -1,4 +1,7 @@
+
 # eleven-weeks-cli
+
+![Demo of eleven-weeks-cli](./eleven-weeks-cli.gif)
 
 Tiny terminal calendar + live clock. Shows an 11‑week rolling view and a minimal 3×5 style digital time overlay—glanceable, uncluttered.
 
